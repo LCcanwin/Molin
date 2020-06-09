@@ -6,21 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lccanwin.github.io">
-  <title>树相关的操作 | 记录</title>
+  <title>Tag: leetcode | 记录</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="树的遍历有前序遍历、中序遍历、后续遍历、层序遍历.遍历的主流操作有递归操作和非递归操作.非递归一般使用栈和队列来辅助完成.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="树相关的操作">
-<meta property="og:url" content="https://lccanwin.github.io/2020/06/09/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/index.html">
+  <meta name="description" content="java开发工程师,爱篮球,喜欢rap">
+<meta property="og:type" content="website">
+<meta property="og:title" content="记录">
+<meta property="og:url" content="https://lccanwin.github.io/public/tags/leetcode/index.html">
 <meta property="og:site_name" content="记录">
-<meta property="og:description" content="树的遍历有前序遍历、中序遍历、后续遍历、层序遍历.遍历的主流操作有递归操作和非递归操作.非递归一般使用栈和队列来辅助完成.">
+<meta property="og:description" content="java开发工程师,爱篮球,喜欢rap">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-06-09T06:00:17.000Z">
-<meta property="article:modified_time" content="2020-06-09T13:19:19.925Z">
 <meta property="article:author" content="molin">
-<meta property="article:tag" content="二叉树">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="记录" type="application/atom+xml">
@@ -175,235 +172,76 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-二叉树的相关操作" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
+            
+  
+  
     
-      <header class="article-header">
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	
+<a href="/2020/06/09/%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" class="archive-article-date">
+        <time datetime="2020-06-09T13:20:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-09</time>
+</a>
+
+        </div>
+    	 
   
+    <h1 itemprop="name">
+	
+	  <a class="archive-article-title" href="/2020/06/09/%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" target="_blank">树的子结构</a>
   
-    <h1 class="article-title" itemprop="name">
-      树相关的操作
     </h1>
   
 
 
-  
-  
-<a href="/2020/06/09/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" class="archive-article-date">
-        <time datetime="2020-06-09T06:00:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-09</time>
-</a>
-
-  
-  
-    
-<div style="margin-top:10px;">
-  <span class="post-time">
-    <span class="post-meta-item-icon">
-      <!-- fonts.scss -->
-      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
-      <i class="icon-statistics"></i>
-      <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">540字</span>
-    </span>
-  </span>
-
-  <span class="post-time">
-    &nbsp; | &nbsp;
-    <span class="post-meta-item-icon">
-      <i class="icon-book icon"></i>
-      <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">2分</span>
-    </span>
-  </span>
-</div>
-
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>树的遍历有前序遍历、中序遍历、后续遍历、层序遍历.遍历的主流操作有递归操作和非递归操作.非递归一般使用栈和队列来辅助完成.</p>
- <a id="more"></a>
-
-<p>[ toc ]</p>
-<h4 id="二叉树的前序遍历–递归"><a href="#二叉树的前序遍历–递归" class="headerlink" title="二叉树的前序遍历–递归"></a>二叉树的前序遍历–递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showPreTree</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">System.out.print(root.val + <span class="string">" "</span>);</span><br><span class="line">showPreTree(root.left);</span><br><span class="line">showPreTree(root.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树的前序遍历–非递归"><a href="#二叉树的前序遍历–非递归" class="headerlink" title="二叉树的前序遍历–非递归"></a>二叉树的前序遍历–非递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showPreTree</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (root==<span class="keyword">null</span>)&#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">TreeNode cur = root;</span><br><span class="line"><span class="keyword">while</span> (cur != <span class="keyword">null</span> || !stack.empty()) &#123;</span><br><span class="line">   <span class="keyword">while</span> (cur != <span class="keyword">null</span>) &#123;</span><br><span class="line">       System.out.print(cur.val+<span class="string">" "</span>);</span><br><span class="line">       stack.push(cur);</span><br><span class="line">       cur = cur.left;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//一路遍历到左子树为空开始弹出</span></span><br><span class="line">   cur = stack.pop();</span><br><span class="line">   <span class="comment">// 转向</span></span><br><span class="line">   cur = cur.right;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树的中序遍历–递归"><a href="#二叉树的中序遍历–递归" class="headerlink" title="二叉树的中序遍历–递归"></a>二叉树的中序遍历–递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showMidTree</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">showMidTree(root.left);</span><br><span class="line">System.out.print(root.val + <span class="string">" "</span>);</span><br><span class="line">showMidTree(root.right);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树的中序遍历–非递归"><a href="#二叉树的中序遍历–非递归" class="headerlink" title="二叉树的中序遍历–非递归"></a>二叉树的中序遍历–非递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showMidTree</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">TreeNode curr = root;</span><br><span class="line"><span class="keyword">while</span> (curr != <span class="keyword">null</span> || !stack.empty()) &#123;</span><br><span class="line">   <span class="keyword">while</span> (curr != <span class="keyword">null</span>) &#123;</span><br><span class="line">       stack.push(curr);</span><br><span class="line">       curr = curr.left;</span><br><span class="line">   &#125;</span><br><span class="line">   curr = stack.pop();</span><br><span class="line">   System.out.print(curr.val + <span class="string">" "</span>);</span><br><span class="line">   curr = curr.right;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树的后续遍历–递归"><a href="#二叉树的后续遍历–递归" class="headerlink" title="二叉树的后续遍历–递归"></a>二叉树的后续遍历–递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showBackTree</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line"><span class="keyword">if</span> (root==<span class="keyword">null</span>)&#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">showBackTree(root.left);</span><br><span class="line">showBackTree(root.right);</span><br><span class="line">System.out.print(root.val+<span class="string">" "</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树的后续遍历–非递归"><a href="#二叉树的后续遍历–非递归" class="headerlink" title="二叉树的后续遍历–非递归"></a>二叉树的后续遍历–非递归</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showBackTree</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line"><span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line">Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">TreeNode curr = root;</span><br><span class="line">TreeNode last = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">while</span> (curr != <span class="keyword">null</span> || !stack.empty()) &#123;</span><br><span class="line">   <span class="keyword">while</span> (curr != <span class="keyword">null</span>) &#123;</span><br><span class="line">       stack.push(curr);</span><br><span class="line">       curr = curr.left;</span><br><span class="line">   &#125;</span><br><span class="line">   curr = stack.peek();</span><br><span class="line">   <span class="keyword">if</span> (curr.right == <span class="keyword">null</span> || curr.right == last) &#123;</span><br><span class="line">       System.out.print(curr.val + <span class="string">" "</span>);</span><br><span class="line">       stack.pop();</span><br><span class="line">       <span class="comment">// 记录上一个访问的节点</span></span><br><span class="line">       <span class="comment">// 用于判断“访问根节点之前，右子树是否已访问过”</span></span><br><span class="line">       last = curr;</span><br><span class="line">       <span class="comment">// 表示不需要转向，继续弹栈</span></span><br><span class="line">       curr = <span class="keyword">null</span>;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       curr = curr.right;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="二叉树的层序遍历"><a href="#二叉树的层序遍历" class="headerlink" title="二叉树的层序遍历"></a>二叉树的层序遍历</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) &#123;</span><br><span class="line">         <span class="keyword">if</span>(root == <span class="keyword">null</span>)</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;TreeNode&gt;();</span><br><span class="line">       queue.add(root);</span><br><span class="line">       <span class="keyword">while</span>(!queue.isEmpty())&#123;</span><br><span class="line">           <span class="keyword">int</span> count = queue.size();</span><br><span class="line">           List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">           <span class="keyword">while</span>(count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">               TreeNode node = queue.poll();</span><br><span class="line">               list.add(node.val);</span><br><span class="line">               <span class="keyword">if</span>(node.left != <span class="keyword">null</span>)</span><br><span class="line">                   queue.add(node.left);</span><br><span class="line">               <span class="keyword">if</span>(node.right != <span class="keyword">null</span>)</span><br><span class="line">                   queue.add(node.right);</span><br><span class="line">               count--;</span><br><span class="line">           &#125;</span><br><span class="line">           res.add(list);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> res;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-
-    
-
-    
-
-    
-    <div class="declare"> 
-      <ul class="post-copyright">
-        <li>
-          <strong>本文作者：</strong>
-          molin
-        </li>
-        <li>
-          <strong>本文链接：</strong>
-          <a href="https:/lccanwin.github.io/2020/06/09/二叉树的相关操作/" title="树相关的操作" target="_blank">https:/lccanwin.github.io/2020/06/09/二叉树的相关操作/</a>
-        </li>
-        
-        <li>
-          <strong>版权声明： </strong>
+        <div class="article-info info-on-right">
           
-          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
-        </li>
-        
-      </ul>
-    </div>
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">二叉树</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">leetcode</a>
         		</li>
       		
 		</ul>
 	</div>
 
-    
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/数据结构//" class="article-tag-list-link color5">数据结构</a>
+        			<a href="/categories/算法//" class="article-tag-list-link color3">算法</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-    
-
-    
-    
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a> -->
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=https://lccanwin.github.io/2020/06/09/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/" alt="微信分享二维码"> -->
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-
-    
-    <div class="clearfix"></div>
-  </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-
-<nav id="article-nav">
-  
-    <a href="/2020/06/09/%E6%A0%91%E7%9A%84%E5%AD%90%E7%BB%93%E6%9E%84/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          树的子结构
-        
-      </div>
-    </a>
   
   
-    <a href="/2020/01/17/git%E5%91%BD%E4%BB%A4%E4%BD%BF%E7%94%A8/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">git一些命令使用</div>
-      <i class="icon-circle-right"></i>
-    </a>
+    </div></section>
   
-</nav>
 
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
           </div>
@@ -429,9 +267,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
