@@ -44,6 +44,9 @@
   
 
   
+    
+ 	  <script src="/lib/clickLove.js"></script>
+  
   
 
 
@@ -78,12 +81,6 @@
 			
 				<li><a href="/photos" target="_blank">相册</a></li>
 			
-				<li><a href="/tags/%E9%9A%8F%E7%AC%94/" target="_blank">随笔</a></li>
-			
-				<li><a href="/categories" target="_blank">分类</a></li>
-			
-				<li><a href="/tags" target="_blank">标签</a></li>
-			
 			</ul>
 		</nav>
 		<nav class="header-smart-menu">
@@ -100,13 +97,7 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" href="#" title="GitHub" target="_blank"><i class="icon-github"></i></a>
-				
-					<a class="gitee" href="#" title="gitee" target="_blank"><i class="icon-gitee"></i></a>
-				
-					<a class="jianshu" href="#" title="jianshu" target="_blank"><i class="icon-jianshu"></i></a>
-				
-					<a class="cnblog" href="#" title="cnblog" target="_blank"><i class="icon-cnblog"></i></a>
+					<a class="github" href="https://github.com/LCcanwin" title="GitHub" target="_blank"><i class="icon-github"></i></a>
 				
 			</div>
 		
@@ -151,24 +142,12 @@
 			
 				
 			
-				
-			
-				
-			
-				
-			
 			
 			
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="GitHub"><i class="icon-github"></i></a>
-			        
-						<a class="gitee" target="_blank" href="#" title="gitee"><i class="icon-gitee"></i></a>
-			        
-						<a class="jianshu" target="_blank" href="#" title="jianshu"><i class="icon-jianshu"></i></a>
-			        
-						<a class="cnblog" target="_blank" href="#" title="cnblog"><i class="icon-cnblog"></i></a>
+						<a class="github" target="_blank" href="https://github.com/LCcanwin" title="GitHub"><i class="icon-github"></i></a>
 			        
 				</div>
 			</nav>
@@ -177,17 +156,11 @@
 				<ul style="width: 70%">
 				
 				
-					<li style="width: 16.666666666666668%"><a href="/">主页</a></li>
+					<li style="width: 33.333333333333336%"><a href="/">主页</a></li>
 		        
-					<li style="width: 16.666666666666668%"><a href="/archives">归档</a></li>
+					<li style="width: 33.333333333333336%"><a href="/archives">归档</a></li>
 		        
-					<li style="width: 16.666666666666668%"><a href="/photos">相册</a></li>
-		        
-					<li style="width: 16.666666666666668%"><a href="/tags/%E9%9A%8F%E7%AC%94/">随笔</a></li>
-		        
-					<li style="width: 16.666666666666668%"><a href="/categories">分类</a></li>
-		        
-					<li style="width: 16.666666666666668%"><a href="/tags">标签</a></li>
+					<li style="width: 33.333333333333336%"><a href="/photos">相册</a></li>
 		        
 				</ul>
 			</nav>
@@ -364,20 +337,7 @@
     
     <p>查看以及修改用户和邮箱<br>git config user.name     git config user.email</p>
 <p>git config –global user.name “name”   git config –global user.email “email”</p>
-<p>gti创建版本库和添加，提交<br>进入某个文件夹 git init     git add     git commit -m “message”   add是提交到缓冲区，commit是提交到版本库</p>
-<p>关于commit，我们可以将其用来处理需求不确定的代码，当我们commit后，再将代码写成需求2，这个时候，我们用git log可以看到commit的代码。</p>
-<p>git log –pretty=oneline显示成一条线。日志前面的是commit id。</p>
-<p>回退版本:</p>
-<p>git reset –hard 头部版本</p>
-<p>记录你每次操作的命令</p>
-<p>git reflog   </p>
-<p>分支相关<br>查看当前分支: git branch    切换分支: git checkout name</p>
-<p>创建分支: git checkout -b name       删除分支: git branch -d name    创建并切换到分支: git checkout -b name</p>
-<p>查看远程库信息: git remote</p>
-<p>推送代码到远程分支: git push origin dev (推送分之前先进行git pull 拉取最新分支)</p>
-<p>回退远程分支，可以先将本地回退然后在解决合并冲突再push到远程</p>
-<p>git rebase操作<br>当你的分支许久没有更新的时候，肯定落后master分支很多版本，所以当你merge操作前，一点要将你的分支进行rebase，rebase的操作是先git checkout你的分支，然后进行git rebase master，如果这个过程中出现冲突则修改冲突后，git add . ，再执行gti rebase –continue ，再gti status查看是否还有冲突。当解决所有冲突后，一定会出现多个commit的信息，这种信息就相当繁杂。合并多个commit的操作可以将 分支先 git reset 到最开始commit前的一个head，再执行 git add .  再执行git commit -m ，最后再git push -f则完成了多个commit合并为一个commit。</p>
-
+    
     
 
     
