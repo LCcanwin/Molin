@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://molin.cool/images/redisKey.png">
 <meta property="og:image" content="https://molin.cool/images/redisKey3.png">
 <meta property="article:published_time" content="2020-06-10T04:27:40.000Z">
-<meta property="article:modified_time" content="2020-06-13T05:20:49.101Z">
+<meta property="article:modified_time" content="2020-06-13T05:31:19.191Z">
 <meta property="article:author" content="molin">
 <meta property="article:tag" content="线上告警">
 <meta name="twitter:card" content="summary">
@@ -206,7 +206,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">664字</span>
+      <span class="post-count">661字</span>
     </span>
   </span>
 
@@ -241,7 +241,7 @@
 <p>2.增加本地缓存</p>
 <p>3.进行接口重构,重新设计接口。</p>
 <h4 id="方案验证"><a href="#方案验证" class="headerlink" title="方案验证"></a>方案验证</h4><p>方案1:</p>
-<p>可以按现在redis存储的数据可以根据某一字段区分value，从这个维度拆分key，但是总数有将近1.3w，拆分后使用mget进行获取，势必会超时。<a href="mget性能分析">https://blog.csdn.net/jinlu_npu/article/details/79744689</a>所以该方案舍弃。</p>
+<p>可以按现在redis存储的数据可以根据某一字段区分value，从这个维度拆分key，但是总数有将近1.3w，拆分后使用mget进行获取，势必会超时。<a href="https://blog.csdn.net/jinlu_npu/article/details/79744689" target="_blank" rel="noopener">mget性能分析</a>所以该方案舍弃。</p>
 <p>方案2:</p>
 <p>增加本地缓存，此接功能属于老功能了，平时流量不高，如果使用本地缓存效果并不明显。所以方案舍弃。</p>
 <p>方案3:</p>
