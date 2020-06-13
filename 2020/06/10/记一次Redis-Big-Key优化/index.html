@@ -10,17 +10,17 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="Redis key的大小 一次set的耗时">
+  <meta name="description" content="redis大key非常对redis集群影响非常大,因此需要优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次Redis Big Key优化">
 <meta property="og:url" content="https://lccanwin.github.io/2020/06/10/%E8%AE%B0%E4%B8%80%E6%AC%A1Redis-Big-Key%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="记录">
-<meta property="og:description" content="Redis key的大小 一次set的耗时">
+<meta property="og:description" content="redis大key非常对redis集群影响非常大,因此需要优化">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://molin.cool/images/redisKey.png">
-<meta property="og:image" content="https://molin.cool/images/redisKey2.png">
+<meta property="og:image" content="https://molin.cool/images/redisKey3.png">
 <meta property="article:published_time" content="2020-06-10T04:27:40.000Z">
-<meta property="article:modified_time" content="2020-06-13T02:15:26.420Z">
+<meta property="article:modified_time" content="2020-06-13T02:21:16.977Z">
 <meta property="article:author" content="molin">
 <meta property="article:tag" content="线上告警">
 <meta name="twitter:card" content="summary">
@@ -206,7 +206,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">11字</span>
+      <span class="post-count">29字</span>
     </span>
   </span>
 
@@ -226,8 +226,11 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h4 id="Redis-key的大小"><a href="#Redis-key的大小" class="headerlink" title="Redis key的大小"></a>Redis key的大小</h4><p><img src="https://molin.cool/images/redisKey.png" alt=""></p>
-<h4 id="一次set的耗时"><a href="#一次set的耗时" class="headerlink" title="一次set的耗时"></a>一次set的耗时</h4><p><img src="https://molin.cool/images/redisKey2.png" alt=""></p>
+    <p>redis大key非常对redis集群影响非常大,因此需要优化</p>
+ <a id="more"></a>
+
+<h4 id="Redis-key的大小"><a href="#Redis-key的大小" class="headerlink" title="Redis key的大小"></a>Redis key的大小</h4><p><img src="https://molin.cool/images/redisKey.png" alt=""></p>
+<h4 id="一次set的耗时"><a href="#一次set的耗时" class="headerlink" title="一次set的耗时"></a>一次set的耗时</h4><p><img src="https://molin.cool/images/redisKey3.png" alt=""></p>
 
     
 
