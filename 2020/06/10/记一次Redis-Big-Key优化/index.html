@@ -6,21 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lccanwin.github.io">
-  <title>记一次Redis Big Key优化 | 记录</title>
+  <title>记一次Redis Big Key优化经历 | 记录</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="redis大key非常对redis集群影响非常大,因此需要优化">
+  <meta name="description" content="redis大key对redis集群影响非常大,因此需要优化,下面是我在实际开发中遇到的redis大key问题。记录一次优化的过程。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记一次Redis Big Key优化">
+<meta property="og:title" content="记一次Redis Big Key优化经历">
 <meta property="og:url" content="https://lccanwin.github.io/2020/06/10/%E8%AE%B0%E4%B8%80%E6%AC%A1Redis-Big-Key%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="记录">
-<meta property="og:description" content="redis大key非常对redis集群影响非常大,因此需要优化">
+<meta property="og:description" content="redis大key对redis集群影响非常大,因此需要优化,下面是我在实际开发中遇到的redis大key问题。记录一次优化的过程。">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://molin.cool/images/redisKey.png">
 <meta property="og:image" content="https://molin.cool/images/redisKey3.png">
 <meta property="article:published_time" content="2020-06-10T04:27:40.000Z">
-<meta property="article:modified_time" content="2020-06-13T02:21:16.977Z">
+<meta property="article:modified_time" content="2020-06-13T05:20:49.101Z">
 <meta property="article:author" content="molin">
 <meta property="article:tag" content="线上告警">
 <meta name="twitter:card" content="summary">
@@ -185,7 +185,7 @@
   
   
     <h1 class="article-title" itemprop="name">
-      记一次Redis Big Key优化
+      记一次Redis Big Key优化经历
     </h1>
   
 
@@ -206,7 +206,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">29字</span>
+      <span class="post-count">664字</span>
     </span>
   </span>
 
@@ -215,7 +215,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">2分</span>
     </span>
   </span>
 </div>
@@ -226,11 +226,27 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>redis大key非常对redis集群影响非常大,因此需要优化</p>
+    <p>redis大key对redis集群影响非常大,因此需要优化,下面是我在实际开发中遇到的redis大key问题。记录一次优化的过程。</p>
  <a id="more"></a>
 
+<h4 id="业务背景"><a href="#业务背景" class="headerlink" title="业务背景"></a>业务背景</h4><p>近段时间，博主发现报警群里经常有这个报警，如下截图。本人有强迫症，于是乎便去代码中一探究竟，发现了这个报警的原因。是祖传老代码中有人不当使用redis造成的，大概操作就是将业务中某块功能所需的全部信息直接怼入了Redis，当需要时，再全部获获取出来再过滤 : (  于是本人主动申请优化功能，便有了这次优化过程。好了废话不多说了。直接开始吧！</p>
 <h4 id="Redis-key的大小"><a href="#Redis-key的大小" class="headerlink" title="Redis key的大小"></a>Redis key的大小</h4><p><img src="https://molin.cool/images/redisKey.png" alt=""></p>
 <h4 id="一次set的耗时"><a href="#一次set的耗时" class="headerlink" title="一次set的耗时"></a>一次set的耗时</h4><p><img src="https://molin.cool/images/redisKey3.png" alt=""></p>
+<p>redis存储的大小如上图所示，12MB左右。并且一次set的耗时也非常长，81ms。这么大的value的值对redis集群以及服务有什么影响呢？我们下面剖析一下。</p>
+<h4 id="redis集群"><a href="#redis集群" class="headerlink" title="redis集群"></a>redis集群</h4><p>集群redis都是使用Redis Cluster主从模型，一般三主三从，就是三个主节点，三个从节点，从节点属于主节点副本。三主节点例如节点A包含从0到5500的哈希槽。节点B包含从5501到11000的哈希槽。节点C包含从11001到16383的哈希槽。redis会根据你的key写入不同的节点。</p>
+<h4 id="分析大key的影响"><a href="#分析大key的影响" class="headerlink" title="分析大key的影响"></a>分析大key的影响</h4><p>1.内存空间的影响：redis集群一般是单机多实例部署，所以会导致内存空间不均衡，影响整个集群。</p>
+<p>2.请求阻塞的影响：redis操作大key非常耗时，属于慢查询，执行时间过长时，会阻塞其他客户端。</p>
+<p>3.网卡流量的影响：当大key例如12MB时，如果这个key每秒访问量是100的话，每秒产生流量为1200MB，对于普通服务器一般是扛不住这么大的流量的。</p>
+<h4 id="想到的解决方案"><a href="#想到的解决方案" class="headerlink" title="想到的解决方案"></a>想到的解决方案</h4><p>1.拆分大key。</p>
+<p>2.增加本地缓存</p>
+<p>3.进行接口重构,重新设计接口。</p>
+<h4 id="方案验证"><a href="#方案验证" class="headerlink" title="方案验证"></a>方案验证</h4><p>方案1:</p>
+<p>可以按现在redis存储的数据可以根据某一字段区分value，从这个维度拆分key，但是总数有将近1.3w，拆分后使用mget进行获取，势必会超时。<a href="mget性能分析">https://blog.csdn.net/jinlu_npu/article/details/79744689</a>所以该方案舍弃。</p>
+<p>方案2:</p>
+<p>增加本地缓存，此接功能属于老功能了，平时流量不高，如果使用本地缓存效果并不明显。所以方案舍弃。</p>
+<p>方案3:</p>
+<p>经过一系列对比，还是决定对接口进行重构。</p>
+<h4 id="最终结果"><a href="#最终结果" class="headerlink" title="最终结果"></a>最终结果</h4><p>todo</p>
 
     
 
