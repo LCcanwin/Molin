@@ -6,19 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lccanwin.github.io">
-  <title>JVM相关 | 记录</title>
+  <title>JVM中的逃逸分析 | 记录</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="description" content="jvm基本原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVM相关">
+<meta property="og:title" content="JVM中的逃逸分析">
 <meta property="og:url" content="https://lccanwin.github.io/2020/06/18/JVM%E7%9B%B8%E5%85%B3/index.html">
 <meta property="og:site_name" content="记录">
 <meta property="og:description" content="jvm基本原理">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-06-18T10:27:28.000Z">
-<meta property="article:modified_time" content="2020-06-23T08:30:29.498Z">
+<meta property="article:modified_time" content="2020-06-30T04:11:26.881Z">
 <meta property="article:author" content="molin">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -173,7 +173,7 @@
   
   
     <h1 class="article-title" itemprop="name">
-      JVM相关
+      JVM中的逃逸分析
     </h1>
   
 
@@ -194,7 +194,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">739字</span>
+      <span class="post-count">1.1k字</span>
     </span>
   </span>
 
@@ -203,7 +203,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">2分</span>
+      <span class="post-count">3分</span>
     </span>
   </span>
 </div>
@@ -217,6 +217,16 @@
     <p>jvm基本原理</p>
  <a id="more"></a>
 
+<p><strong>内存分配的对象</strong>：要明白首先要知道Java 中的变量有<strong>类变量</strong>以及<strong>类成员变量</strong>两种类型，（类变量指的是被 static 修饰的变量，其他所有类型的变量都属于类成员变量）。在准备阶段，JVM 只会为<strong>类变量</strong>分配内存，而不会为<strong>类成员变量</strong>分配内存。<strong>类成员变量</strong>的内存分配需要等到<strong>初始化</strong>阶段才开始。</p>
+<p><strong>初始化的类型</strong>：在准备阶段，JVM 会为类变量分配内存（分配的内存是方法区），并为其初始化（JVM 只会为类变量分配内存，而不会为类成员变量分配内存，类成员变量自然这个时候也不能被初始化）。但是这里的初始化指的是为变量赋予 Java 语言中该数据类型的默认值，而不是用户代码里初始化的值。但如果一个变量是常量（被 <code>static final</code> 修饰）的话，那么在准备阶段，属性便会被赋予用户希望的值。</p>
+<p>例如下面的代码在准备阶段之后，<code>LeiBianLiang</code> 的值将是 0，而不是 666。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> LeiBianLiang = <span class="number">666</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>类加载的双亲委派机制：</p>
+<p>如果加载器有父类加载器先委托给父类加载，一直到启动类加载器。如果父类加载器加载不了则由子类加载器加载。</p>
+<p>好处：1.避免重复加载类 2.防止修改核心内库API</p>
 <p>jvm运行时的内存区域划分可以分为堆、栈空间。堆中有方法区、堆。栈空间有java虚拟机栈、本地方法栈、PC寄存器。其中栈空间是线程私有的。<br>在运行过程中，每当调用进入一个 Java 方法，Java 虚拟机会在当前线程的 Java 方法栈中生成一个栈帧，用以存放局部变量以及字节码的操作数。这个栈帧的大小是提前计算好的，而且 Java 虚拟机不要求栈帧在内存空间里连续分布。<br>java字节码无法直接执行，jvm需要将字节码编译成机器码。在HotSpot中，这个编译过程有两种方式，1.解释执行，即逐条将字节码编译成机器码。2.即时编译（JIT）将一个方法中的所有字节码编译成机器码再执行。<br>前者的优势在于无需等待编译，而后者的优势在于实际运行速度更快。HotSpot 默认采用混合模式，综合了解释执行和即时编译两者的优点。它会先解释执行字节码，而后将其中反复执行的热点代码，以方法为单位进行即时编译。<br>Java 虚拟机将运行时内存区域划分为五个部分，分别为方法区、堆、PC 寄存器、Java 方法栈和本地方法栈。Java 程序编译而成的 class 文件，需要先加载至方法区中，方能在 Java 虚拟机中运行。为了提高运行效率，标准 JDK 中的 HotSpot 虚拟机采用的是一种混合执行的策略。它会解释执行 Java 字节码，然后会将其中反复执行的热点代码，以方法为单位进行即时编译，翻译成机器码后直接运行在底层硬件之上。<br>局部变量区，以及字节码的操作数栈。这里的局部变量是广义的，除了普遍意义下的局部变量之外，它还包含实例方法的“this 指针”以及方法所接收的参数。<br>java基本类型<br>Java 的基本类型都有对应的值域和默认值。可以看到，byte、short、int、long、float 以及 double 的值域依次扩大，而且前面的值域被后面的值域所包含。因此，从前面的基本类型转换至后面的基本类型，无需强制转换。另外一点值得注意的是，尽管他们的默认值看起来不一样，但在内存中都是 0。</p>
 <p>java虚拟机中，每个 Java 对象都有一个对象头（object header），这个由标记字段和类型指针所构成。其中，标记字段用以存储 Java 虚拟机有关该对象的运行数据，如哈希码、GC 信息以及锁信息，而类型指针则指向该对象的类。</p>
 
@@ -264,6 +274,15 @@
 
 
 <nav id="article-nav">
+  
+    <a href="/2020/06/29/%E5%85%B3%E4%BA%8EJava%E5%AF%B9%E8%B1%A1%E5%A4%A7%E5%B0%8F%E8%AE%A1%E7%AE%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          关于Java对象大小计算
+        
+      </div>
+    </a>
   
   
     <a href="/2020/06/15/%E8%81%8C%E4%B8%9A%E7%94%9F%E6%B6%AF%E4%B8%80%E5%91%A8%E5%B9%B4%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
@@ -422,6 +441,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">java</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
             
             <div class="clearfix"></div>

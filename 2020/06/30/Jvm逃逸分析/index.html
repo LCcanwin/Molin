@@ -6,19 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lccanwin.github.io">
-  <title>Category: Redis | 记录</title>
+  <title>Jvm逃逸分析 | 记录</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="java开发工程师,爱篮球,喜欢rap">
-<meta property="og:type" content="website">
-<meta property="og:title" content="记录">
-<meta property="og:url" content="https://lccanwin.github.io/categories/Redis/index.html">
+  <meta name="description" content="本文Java虚拟机默认为HotSpot虚拟机咱们通常理解都认为Jvm创建的对象实例分配在堆上，可事实上真是如此吗？要解决这个问题，就不得不提到Jvm的逃逸分析了。要进行逃逸分析，首先需要理解几个概念。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jvm逃逸分析">
+<meta property="og:url" content="https://lccanwin.github.io/2020/06/30/Jvm%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90/index.html">
 <meta property="og:site_name" content="记录">
-<meta property="og:description" content="java开发工程师,爱篮球,喜欢rap">
+<meta property="og:description" content="本文Java虚拟机默认为HotSpot虚拟机咱们通常理解都认为Jvm创建的对象实例分配在堆上，可事实上真是如此吗？要解决这个问题，就不得不提到Jvm的逃逸分析了。要进行逃逸分析，首先需要理解几个概念。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://molin.cool/images/notescape.png">
+<meta property="og:image" content="https://molin.cool/images/escape.png">
+<meta property="og:image" content="https://molin.cool/images/inline.png">
+<meta property="article:published_time" content="2020-06-30T03:10:56.000Z">
+<meta property="article:modified_time" content="2020-06-30T04:11:34.235Z">
 <meta property="article:author" content="molin">
+<meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://molin.cool/images/notescape.png">
   
     <link rel="alternative" href="/atom.xml" title="记录" type="application/atom+xml">
   
@@ -163,76 +170,154 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Jvm逃逸分析" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/06/10/%E8%AE%B0%E4%B8%80%E6%AC%A1Redis-Big-Key%E4%BC%98%E5%8C%96/" class="archive-article-date">
-        <time datetime="2020-06-10T04:27:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-10</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/06/10/%E8%AE%B0%E4%B8%80%E6%AC%A1Redis-Big-Key%E4%BC%98%E5%8C%96/" target="_blank">记一次Redis Big Key优化经历</a>
   
+    <h1 class="article-title" itemprop="name">
+      Jvm逃逸分析
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+  
+  
+<a href="/2020/06/30/Jvm%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90/" class="archive-article-date">
+        <time datetime="2020-06-30T03:10:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-30</time>
+</a>
+
+  
+  
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">1k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">3分</span>
+    </span>
+  </span>
+</div>
+
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h3 id="本文Java虚拟机默认为HotSpot虚拟机"><a href="#本文Java虚拟机默认为HotSpot虚拟机" class="headerlink" title="本文Java虚拟机默认为HotSpot虚拟机"></a>本文Java虚拟机默认为HotSpot虚拟机</h3><p>咱们通常理解都认为Jvm创建的对象实例分配在堆上，可事实上真是如此吗？要解决这个问题，就不得不提到Jvm的逃逸分析了。要进行逃逸分析，首先需要理解几个概念。</p>
+ <a id="more"></a>
+
+<h4 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h4><h4 id="1-即时编译（Just-In-Time-compilation，JIT）"><a href="#1-即时编译（Just-In-Time-compilation，JIT）" class="headerlink" title="1.即时编译（Just-In-Time compilation，JIT）"></a>1.即时编译（Just-In-Time compilation，JIT）</h4><p>编译器将字节码的编译成机器码有两种形式，一种是解释执行，一种是即时编译。两者的区别是解释执行无需等待编译，即时编译实际运行速度更快。虚拟机默认采用混合执行以提升性能（启动和峰值性能）。虚拟机内置了多个即时编译器有C1、C2、Graal。C1适用于客户端如GUI程序。C2适用于服务端如Web后台。Graal 是 Java 10 正式引入的实验性即时编译器。虚拟机在1.7开始默认采用分层编译的方式：热点方法首先会被 C1 编译，而后热点方法中的热点会进一步被 C2 编译。而且使用额外的编译线程进行编译，默认线程数为1:2。</p>
+<h4 id="2-热点代码分析"><a href="#2-热点代码分析" class="headerlink" title="2.热点代码分析"></a>2.热点代码分析</h4><p>虚拟机根据方法调用次数和循环回边的执行次数来触发即时编译。即时编译的触发并不需要非常精确的数值。只要该数值足够大，就能说明对应的方法包含热点代码。</p>
+<h4 id="3-方法内联"><a href="#3-方法内联" class="headerlink" title="3.方法内联"></a>3.方法内联</h4><p>方法内联是指，在编译过程中，当遇到方法调用时，将目标方法的方法体纳入编译范围之中，并取代原方法调用的优化手段。但是，方法内联越多，1.即时编译器编译时间也就越长。2.编译成的机器码也会越长，越容易填满 Code Cache。会导致即时编译关闭的现象。</p>
+<h3 id="二、逃逸分析"><a href="#二、逃逸分析" class="headerlink" title="二、逃逸分析"></a>二、逃逸分析</h3><p>有了以上概念的话，我们就容易理解在即时编译环境下，会对新建对象判断是否逃逸，主要通过1.对象是否被存入堆中（静态字段或者堆中对象的实例字段），二是对象是否被传入未知代码中（没有被方法内联的代码成为未知代码)。逃逸分析是在方法内联之后，如果创建的对象实例没有被其他非内联方法调用的话，就判断为非逃逸对象。即时编译器便对其进行优化，使用锁消除和标量替换将对象拆分成一个单独的字段，并将其分布在栈内存或者寄存器中。因此对象存在于堆上并不那么绝对。</p>
+<h3 id="三、即时编译对于JVM性能的提升"><a href="#三、即时编译对于JVM性能的提升" class="headerlink" title="三、即时编译对于JVM性能的提升"></a>三、即时编译对于JVM性能的提升</h3><p>我使用一段自己的测试代码进行分析。<br>UserDTO这个类就只有一个属性，sex字段。为了方便测试Jvm堆默认大小和最大值都设置为10m -Xmx10m -Xms10m</p>
+<p>public class TestEscape {</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">long</span> i = <span class="number">0</span>; i &lt; <span class="number">1000_000_000</span>; i++) &#123;</span><br><span class="line">        UserDTO  user = <span class="keyword">new</span> UserDTO();</span><br><span class="line">        user.setSex(<span class="number">0</span>);</span><br><span class="line">        useMethod(user);</span><br><span class="line">    &#125;</span><br><span class="line">        Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">useMethod</span><span class="params">(UserDTO list)</span></span>&#123;</span><br><span class="line">    list.getSex();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}</p>
+<p>先关闭逃逸分析：-XX:-DoEscapeAnalysis</p>
+<p><img src="https://molin.cool/images/notescape.png" alt=""></p>
+<p>开启逃逸分析</p>
+<p><img src="https://molin.cool/images/escape.png" alt=""></p>
+<p>经过比发现，关闭逃逸分析进行了7649次Yong Gc，4次Full Gc。开启逃逸分析，进行了7次Yong Gc。0次 Full Gc。因为本地测试堆设置的比较小，因此gc频繁，对比很明显，在实际开发中，开启逃逸分析。性能有3%到6%的提升。</p>
+<h3 id="四、概念验证"><a href="#四、概念验证" class="headerlink" title="四、概念验证"></a>四、概念验证</h3><p>使用命令-XX:+PrintInlining，可以打印出热点代码，如下图可以看到UserDTO的构造方法和useMethod方法都被即时编译器进行了方法内联，而且创建的对象为非逃逸对象，因此进行的gc次数很少，至于为什么仍有7次gc，这个是因为即时编译有个触发阈值，当超过阈值才进行逃逸分析。</p>
+<p><img src="https://molin.cool/images/inline.png" alt=""></p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">线上告警</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+    
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Redis//" class="article-tag-list-link color1">Redis</a>
+        			<a href="/categories/jvm//" class="article-tag-list-link color4">jvm</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+    
 
     
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/29/%E5%85%B3%E4%BA%8EJava%E5%AF%B9%E8%B1%A1%E5%A4%A7%E5%B0%8F%E8%AE%A1%E7%AE%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于Java对象大小计算</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
           </div>
@@ -258,10 +343,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
