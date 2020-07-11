@@ -10,18 +10,25 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="编稿中。。">
+  <meta name="description" content="要对java对象的大小计算，我们首先需要了解几个概念。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Java对象大小计算">
 <meta property="og:url" content="https://lccanwin.github.io/2020/06/29/%E5%85%B3%E4%BA%8EJava%E5%AF%B9%E8%B1%A1%E5%A4%A7%E5%B0%8F%E8%AE%A1%E7%AE%97/index.html">
 <meta property="og:site_name" content="记录">
-<meta property="og:description" content="编稿中。。">
+<meta property="og:description" content="要对java对象的大小计算，我们首先需要了解几个概念。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://molin.cool/images/yasuo.png">
+<meta property="og:image" content="https://molin.cool/images/noyasuo.png">
+<meta property="og:image" content="https://molin.cool/images/shiliyasuo.png">
+<meta property="og:image" content="https://molin.cool/images/noshiliyasuo.png">
+<meta property="og:image" content="https://molin.cool/images/arrayyasuo.png">
+<meta property="og:image" content="https://molin.cool/images/noarrayyasuo.png">
 <meta property="article:published_time" content="2020-06-29T09:10:58.000Z">
-<meta property="article:modified_time" content="2020-06-30T06:18:51.207Z">
+<meta property="article:modified_time" content="2020-07-11T06:19:46.138Z">
 <meta property="article:author" content="molin">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://molin.cool/images/yasuo.png">
   
     <link rel="alternative" href="/atom.xml" title="记录" type="application/atom+xml">
   
@@ -194,7 +201,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">3字</span>
+      <span class="post-count">1k字</span>
     </span>
   </span>
 
@@ -203,7 +210,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">3分</span>
     </span>
   </span>
 </div>
@@ -214,7 +221,51 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <p>编稿中。。</p>
+    <p>要对java对象的大小计算，我们首先需要了解几个概念。</p>
+ <a id="more"></a>
+
+<h3 id="一、基本概念"><a href="#一、基本概念" class="headerlink" title="一、基本概念"></a>一、基本概念</h3><h4 id="1-java虚拟机32位和64位"><a href="#1-java虚拟机32位和64位" class="headerlink" title="1.java虚拟机32位和64位"></a>1.java虚拟机32位和64位</h4><h5 id="运算能力的区别"><a href="#运算能力的区别" class="headerlink" title=".运算能力的区别"></a>.运算能力的区别</h5><p>因为虚拟机属于操作系统上层，所以32位虚拟机是和32位处理器是对应的。所谓32位处理器就是一次只能处理32位，也就是4个字节的数据，而64位处理器一次就能处理64位，即8个字节的数据。如果我们将总长128位的指令分别按照16位、32位、64位为单位进行编辑的话：旧的16位处理器，需要8个指令，32位的处理器需要4个指令，而64位处理器则只要两个指令，显然，在工作频率相同的情况下，64位处理器的处理速度会比16位、32位的更快。</p>
+<h5 id="内存地址的区别"><a href="#内存地址的区别" class="headerlink" title=".内存地址的区别"></a>.内存地址的区别</h5><p>32位虚拟机，对应32位，所以能表达的最大地址就是2^32 为4G，64位则比这个大更多。</p>
+<h4 id="2-java对象的组成"><a href="#2-java对象的组成" class="headerlink" title="2.java对象的组成"></a>2.java对象的组成</h4><p>java对象由对象头、实例数据、填充数据组成。</p>
+<h5 id="对象头"><a href="#对象头" class="headerlink" title=".对象头"></a>.对象头</h5><p>Mark Word 、类型指针、数组长度 、（对象填充），32位占4B，64占8B</p>
+<p>类型指针（基于哪个类生成的指针，指针压缩会影响，将8B变成4B）</p>
+<p>当为数组对象的时候，数组长度才会有值。</p>
+<p>其中对象填充，是数组对象且在关闭压缩指针的情况下会存在。</p>
+<h5 id="实例数据"><a href="#实例数据" class="headerlink" title=".实例数据"></a>.实例数据</h5><p>可以理解为遍历</p>
+<h5 id="填充数据"><a href="#填充数据" class="headerlink" title=".填充数据"></a>.填充数据</h5><p>因为是8字节对齐，因此当存在不对齐的情况，会有填充数据</p>
+<h4 id="3-压缩指针"><a href="#3-压缩指针" class="headerlink" title="3.压缩指针"></a>3.压缩指针</h4><p>oop是指普通对象指针，它是对象的指针或引用。在32位中，占用4字节，在64位中占用8字节。</p>
+<p>对象引用变大却带来了性能问题：</p>
+<h5 id="增加了GC开销"><a href="#增加了GC开销" class="headerlink" title=".增加了GC开销"></a>.增加了GC开销</h5><p>64位对象引用需要占用更多的堆空间，会加快了GC的发生，更频繁的进行GC。</p>
+<h5 id="降低CPU缓存命中率"><a href="#降低CPU缓存命中率" class="headerlink" title=".降低CPU缓存命中率"></a>.降低CPU缓存命中率</h5><p>64位对象引用增大了，CPU能缓存的oop将会更少，从而降低了CPU缓存的效率。</p>
+<p>jvm64位，对象引用变得更大了，但由于实际堆大小的关系，很多对象不需要用真正的引用的地址，因此，出现了指针压缩技术，jvm使用引用的偏移量来表示引用地址。当引用存入寄存器中时，jvm中的oop左移三位，当从寄存器中读取时，又右移动三位，因此开启指针压缩的情况下，oop能表示的最大内存地址是2的35次方也就是32G，当需要扩容时，则可以再多加一个0。</p>
+<h3 id="二、对象的计算"><a href="#二、对象的计算" class="headerlink" title="二、对象的计算"></a>二、对象的计算</h3><p>有了以上概念，我们试着对对象进行一下计算，先贴测试代码。分别测试空对象和有实例对象</p>
+<p>Test1:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestObject n = <span class="keyword">new</span> TestObject();</span><br><span class="line"></span><br><span class="line">        System.out.println(ClassLayout.parseInstance(n).toPrintable());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>1.空对象开启指针压缩所占字节</p>
+<p><img src="https://molin.cool/images/yasuo.png" alt=""></p>
+<p>通过如图可以看到为16字节，具体是对象头12B+对齐填充4B = 16B</p>
+<p>2.空对象关闭指针压缩所占字节</p>
+<p><img src="https://molin.cool/images/noyasuo.png" alt=""></p>
+<p>通过如图可以看到为16字节，具体是对象头16B = 16B</p>
+<p>Test2:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestObject n = <span class="keyword">new</span> TestObject();</span><br><span class="line"></span><br><span class="line">        System.out.println(ClassLayout.parseInstance(n).toPrintable());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3.有一个实例数据开启压缩指针</p>
+<p><img src="https://molin.cool/images/shiliyasuo.png" alt=""></p>
+<p>如图可以看到为：对象头12B+实例数据4B = 16B</p>
+<p>4.有一个实例数据关闭压缩指针</p>
+<p><img src="https://molin.cool/images/noshiliyasuo.png" alt=""></p>
+<p>如图可以看到：对象头16B+实例数据4B+填充对齐4B = 24B</p>
+<p>Test3:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        TestObject[] n = <span class="keyword">new</span> TestObject[<span class="number">0</span>];</span><br><span class="line">        System.out.println(ClassLayout.parseInstance(n).toPrintable());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>5.数组对象开启指针压缩</p>
+<p><img src="https://molin.cool/images/arrayyasuo.png" alt=""></p>
+<p>对象头6B+定义的数组对象个数0B = 16B</p>
+<p>6.数组对象关闭指针压缩</p>
+<p><img src="https://molin.cool/images/noarrayyasuo.png" alt=""></p>
+<p>对象头20B+定义的数组对象个数0B+对齐填充4B = 24B。注意这里的对齐填充也就是padding是存在对象头的</p>
 
     
 
