@@ -170,6 +170,105 @@
             
 
   
+    <article id="post-使用RequestContextHolder传递Trace" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2020/07/11/%E4%BD%BF%E7%94%A8RequestContextHolder%E4%BC%A0%E9%80%92Trace/" target="_blank">使用RequestContextHolder传递Trace</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2020/07/11/%E4%BD%BF%E7%94%A8RequestContextHolder%E4%BC%A0%E9%80%92Trace/" class="archive-article-date">
+        <time datetime="2020-07-11T06:25:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-11</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>分布式服务之间调用需要传递trace，有了trace，通过日志收集后，能够非常方便查看到用户某一次请求在请求链路的情况，并定位一些问题。但是作者现在维护的有些服务例如MQ服务，没有用户请求，因此需要自己生成全局唯一ID，并且传递给其他服务。作者所在公司服务之间的调用都是基于HttpClient进行二次封装的。因此生成的traceId需要通过httpclient组件进行传递。那么如果进行传递呢？</p>
+    
+    <a class="article-more-a" href="/2020/07/11/%E4%BD%BF%E7%94%A8RequestContextHolder%E4%BC%A0%E9%80%92Trace/#more">more >></a>
+    
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术优化</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+    
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Http//" class="article-tag-list-link color5">Http</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2020/07/11/%E4%BD%BF%E7%94%A8RequestContextHolder%E4%BC%A0%E9%80%92Trace/">more >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Jvm逃逸分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -537,107 +636,6 @@
     
     <p class="article-more-link">
       <a class="article-more-a" href="/2020/06/15/%E8%81%8C%E4%B8%9A%E7%94%9F%E6%B6%AF%E4%B8%80%E5%91%A8%E5%B9%B4%E6%80%BB%E7%BB%93/">more >></a>
-    </p>
-    
-
-    
-    <div class="clearfix"></div>
-  </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-http相关" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-  
-  
-    <h1 itemprop="name">
-	
-	  <a class="article-title" href="/2020/06/13/http%E7%9B%B8%E5%85%B3/" target="_blank">http相关</a>
-  
-    </h1>
-  
-
-
-  
-  
-<a href="/2020/06/13/http%E7%9B%B8%E5%85%B3/" class="archive-article-date">
-        <time datetime="2020-06-13T05:40:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-13</time>
-</a>
-
-  
-  
-    
-
-  
-  </header>
-  
-  <div class="article-entry" itemprop="articleBody">
-    
-    <p>网络分层模型</p>
-<p>1.OSI网络参考模型（从下到上）</p>
-<p>物理层    数据链路层    网络层    传输层    会话层    表示层    应用层</p>
-    
-    <a class="article-more-a" href="/2020/06/13/http%E7%9B%B8%E5%85%B3/#more">more >></a>
-    
-    
-
-    
-
-    
-
-  </div>
-  <div class="article-info article-info-index">
-    
-    
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-    
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/计算机网络//" class="article-tag-list-link color1">计算机网络</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-    
-    <p class="article-more-link">
-      <a class="article-more-a" href="/2020/06/13/http%E7%9B%B8%E5%85%B3/">more >></a>
     </p>
     
 
@@ -1182,11 +1180,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color5">技术优化</a>
               </li>
             
             <div class="clearfix"></div>
