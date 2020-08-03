@@ -6,19 +6,24 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://lccanwin.github.io">
-  <title>Category: Http | 记录</title>
+  <title>Threadlocal在多线程间传递 | 记录</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="java开发工程师,爱篮球,喜欢rap">
-<meta property="og:type" content="website">
-<meta property="og:title" content="记录">
-<meta property="og:url" content="https://lccanwin.github.io/categories/Http/index.html">
+  <meta name="description" content="继上一篇，mock一个request对象后，存入通过RequestContextHolder的setRequestAttributes方法存入了当前线程的ThreadLocal中。如果使用了异步的方法调用其他接口，ThreadLocal是不会自动传递给异步的子线程的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Threadlocal在多线程间传递">
+<meta property="og:url" content="https://lccanwin.github.io/2020/07/23/Threadlocal%E5%9C%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%97%B4%E4%BC%A0%E9%80%92/index.html">
 <meta property="og:site_name" content="记录">
-<meta property="og:description" content="java开发工程师,爱篮球,喜欢rap">
+<meta property="og:description" content="继上一篇，mock一个request对象后，存入通过RequestContextHolder的setRequestAttributes方法存入了当前线程的ThreadLocal中。如果使用了异步的方法调用其他接口，ThreadLocal是不会自动传递给异步的子线程的。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://molin.cool/images/inherlocal.png">
+<meta property="article:published_time" content="2020-07-23T03:43:09.000Z">
+<meta property="article:modified_time" content="2020-08-03T12:52:48.073Z">
 <meta property="article:author" content="molin">
+<meta property="article:tag" content="技术优化">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://molin.cool/images/inherlocal.png">
   
     <link rel="alternative" href="/atom.xml" title="记录" type="application/atom+xml">
   
@@ -163,41 +168,97 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Threadlocal在多线程间传递" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/07/11/%E4%BD%BF%E7%94%A8RequestContextHolder%E4%BC%A0%E9%80%92Trace/" class="archive-article-date">
-        <time datetime="2020-07-11T06:25:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-11</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/07/11/%E4%BD%BF%E7%94%A8RequestContextHolder%E4%BC%A0%E9%80%92Trace/" target="_blank">使用RequestContextHolder传递Trace</a>
   
+    <h1 class="article-title" itemprop="name">
+      Threadlocal在多线程间传递
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
+  
+  
+<a href="/2020/07/23/Threadlocal%E5%9C%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%97%B4%E4%BC%A0%E9%80%92/" class="archive-article-date">
+        <time datetime="2020-07-23T03:43:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-23</time>
+</a>
+
+  
+  
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">912字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">3分</span>
+    </span>
+  </span>
+</div>
+
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <p>继上一篇，mock一个request对象后，存入通过RequestContextHolder的setRequestAttributes方法存入了当前线程的ThreadLocal中。如果使用了异步的方法调用其他接口，ThreadLocal是不会自动传递给异步的子线程的。</p>
+ <a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; threadLocal = <span class="keyword">new</span> ThreadLocal&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Executor executor = Executors.newFixedThreadPool(<span class="number">1</span>);</span><br><span class="line">        threadLocal.set(<span class="string">"父线程的本地变量"</span>);</span><br><span class="line">        executor.execute(() -&gt; System.out.println(<span class="string">"子线程调用"</span> + threadLocal.get()));</span><br><span class="line">        System.out.println(threadLocal.get());</span><br><span class="line">        threadLocal.remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">输出：</span><br><span class="line">  父线程的本地变量</span><br><span class="line">  子线程调用<span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+
+<p>因此我们需要自己进行处理，处理的方式有：</p>
+<h4 id="1-通过InheritableThreadLocal"><a href="#1-通过InheritableThreadLocal" class="headerlink" title="1.通过InheritableThreadLocal"></a>1.通过InheritableThreadLocal</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; inheritableThreadLocal = <span class="keyword">new</span> InheritableThreadLocal&lt;&gt;();</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">      Executor executor = Executors.newFixedThreadPool(<span class="number">1</span>);</span><br><span class="line">      inheritableThreadLocal.set(<span class="string">"父线程的本地变量"</span>);</span><br><span class="line">      executor.execute(() -&gt; System.out.println(<span class="string">"子线程调用"</span> + inheritableThreadLocal.get()));</span><br><span class="line">      System.out.println(inheritableThreadLocal.get());</span><br><span class="line">      inheritableThreadLocal.remove();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">输出：</span><br><span class="line">  父线程的本地变量</span><br><span class="line">  子线程调用父线程的本地变量</span><br></pre></td></tr></table></figure>
+
+<p>具体实现是定义一个InheritableThreadLocal，主线程中存入需要传递的Trace。</p>
+<p>2.使用transmittableThreadLocal 组件</p>
+<p>transmittableThreadLocal是<a href="https://github.com/alibaba/transmittable-thread-local" target="_blank" rel="noopener">阿里开源的组件</a>,提供<code>ThreadLocal</code>值的传递功能，解决异步执行时上下文传递的问题。</p>
+<p>简单使用实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> TransmittableThreadLocal&lt;String&gt; context = <span class="keyword">new</span> TransmittableThreadLocal&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Executor executor = Executors.newFixedThreadPool(<span class="number">1</span>);</span><br><span class="line">        context.set(<span class="string">"父线程的本地变量"</span>);</span><br><span class="line">        executor.execute(() -&gt; System.out.println(<span class="string">"子线程调用"</span> + context.get()));</span><br><span class="line">        System.out.println(context.get());</span><br><span class="line">        context.remove();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">输出：</span><br><span class="line">  父线程的本地变量</span><br><span class="line">  子线程调用父线程的本地变量</span><br></pre></td></tr></table></figure>
+
+<p>更多的使用实例例如无侵入使用等，可以去官网详细查看。现在知道了这两种方式，他们底层是如何实现的呢？以及他们有什么异同呢？</p>
+<h4 id="InheritableThreadLocal分析"><a href="#InheritableThreadLocal分析" class="headerlink" title="InheritableThreadLocal分析"></a>InheritableThreadLocal分析</h4><p><img src="https://molin.cool/images/inherlocal.png" alt=""></p>
+<p>可以看到其继承与ThreadLocal这个类，并重写了childValue、getMap、createMap这三个方法。</p>
+<p>重点看看getMap、createMap</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Get the map associated with a ThreadLocal.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> t the current thread</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function">ThreadLocalMap <span class="title">getMap</span><span class="params">(Thread t)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">return</span> t.inheritableThreadLocals;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Create the map associated with a ThreadLocal.</span></span><br><span class="line"><span class="comment">   *</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> t the current thread</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> firstValue value for the initial entry of the table.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">createMap</span><span class="params">(Thread t, T firstValue)</span> </span>&#123;</span><br><span class="line">      t.inheritableThreadLocals = <span class="keyword">new</span> ThreadLocalMap(<span class="keyword">this</span>, firstValue);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们知道ThreadLocal这个类提供线程局部变量。这些变量与正常的变量不同，每个线程都有它自己的、独立初始化的变量副本。副本变量通过TreadLocal中的ThreadMap内部类中的Entry[]数组存储的。InheritableThreadLocal则是重写了这两个方法并定义了inheritableThreadLocals这个变量来存储副本变量。那么为什么InheritableThreadLocal能够能够传递变量呢？</p>
+<p>Thread类中线程init初始化方法中有这样一段代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (inheritThreadLocals &amp;&amp; parent.inheritableThreadLocals != <span class="keyword">null</span>)</span><br><span class="line">    <span class="keyword">this</span>.inheritableThreadLocals =</span><br><span class="line">        ThreadLocal.createInheritedMap(parent.inheritableThreadLocals);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>InheritableThreadLocal对象在创建的时候会赋值给线程的t.inheritableThreadLocals变量</li>
+<li>创建新线程的时候会check父线程中t.inheritableThreadLocals变量是否为null，如果不为null则<code>copy</code>一份ThradLocalMap到子线程的t.inheritableThreadLocals成员变量中去</li>
+<li>InheritableThreadLocal复写了getMap(Thread t)和createMap(Thread t, T firstValue)方法,所以get值得时候，就可以在getMap(t)的时候就会从t.inheritableThreadLocals中拿到map对象，从而实现了可以拿到父线程ThreadLocal中的值</li>
+</ol>
+<h4 id="TransmittableThreadLocal分析"><a href="#TransmittableThreadLocal分析" class="headerlink" title="TransmittableThreadLocal分析"></a>TransmittableThreadLocal分析</h4><p>先看看TTL的核心类TransmittableThreadLocal，它继承于InheritableThreadLocal。所以能够传递ThreadLocal。</p>
+<p>那为什么有了InheritableThreadLocal还需要TransmittableThreadLocal呢？</p>
+<p>上面，我们分析了InheritableThreadLocal能够传递本地变量是因为，Thread在新建的时候，去判断父线程中inheritableThreadLocals是否为null。但是在如果使用了线程池，线程是预先创建好的，在这种情况下InheritableThreadLocal是失效的，因此需要用到TransmittableThreadLocal或者自己实现一个类去处理InheritableThreadLocal值传递。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -209,30 +270,66 @@
 		</ul>
 	</div>
 
-          
+    
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/Http//" class="article-tag-list-link color5">Http</a>
+        			<a href="/categories/日常问题//" class="article-tag-list-link color5">日常问题</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+    
 
     
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/07/11/%E4%BD%BF%E7%94%A8RequestContextHolder%E4%BC%A0%E9%80%92Trace/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用RequestContextHolder传递Trace</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
           </div>
@@ -258,10 +355,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: true,
 		toc_hide_index: true,
 		root: "/",
